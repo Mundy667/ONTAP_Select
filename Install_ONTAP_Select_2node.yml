@@ -3,6 +3,18 @@
   connection: local
   gather_facts: no
 
+#############################################################################
+
+#NNNNNNNNNNNNNNNN     Athor:  David Hepler
+#NNNNNNNNNNNNNNNN     Info:   I made the decision to have 1 playbook 
+#NNNNNN    NNNNNN     for each ONTAP Select cluster size to keep it simple. 
+#NNNNNN    NNNNNN     
+#NNNNNN    NNNNNN     In the longterm it would be best to make an 
+#NNNNNN    NNNNNN     ansible module for the installation.
+
+##############################################################################
+
+############ ------------------OTS Return Codes --------- ############
 # 200 	OK 	Indicates success for calls that do not create a new object.
 # 201 	Created 	An object is successfully created; the location response header includes the unqiue identifer for the object.
 # 202 	Accepted 	A long-running job has been started to perform the request, but the operation has not completed.
@@ -13,12 +25,14 @@
 # 409 	Conflict 	An attempt to create an object failed because the object already exists.
 # 500 	Internal Error 	Indication of a general, non-specific internal error.
 
+############ ------------------VARS --------- ############
   vars:
+# ----- Deploy Specific -----
     otd_user: "admin"
     otd_password: "Netapp01!"
-    ots_password: "Netapp01!"
     deploy_rest_api_url: "https://10.65.56.19/api/v3"
-    new_cluster_node_num: "1"
+# ----- Cluster Specific -----
+    new_cluster_node_num: "2"
     new_cluster_name: "Select-03"
     new_cluster_gateway: "10.65.59.1"
     new_cluster_ip: "10.65.59.164"
@@ -30,6 +44,22 @@
     dns_ips:
       - "10.65.56.5"
       - "10.65.56.6"
+    ots_password: "Netapp01!"
+
+# ----- Node Specific -----
+
+# ----- vCenter Specific -----
+    vcenter_server: "cbc-vc-sdot.muccbc.hq.netapp.com"
+    vcenter_user: "administrator@vsphere.local"
+    vcenter_password: "Netapp01!"
+
+# ----- Host Specific -----
+    hypervisor_hosts:
+     - "cbc-sdot-03.muccbc.hq.netapp.com"
+     - "cbc-sdot-04.muccbc.hq.netapp.com"
+# --extra-vars='{"hypervisor_hosts": [1,2,3]}'
+
+############ ------------------TASKS --------- ############
 
   tasks:
   - name: Check if Cluster already exists
