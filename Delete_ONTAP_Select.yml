@@ -1,0 +1,89 @@
+--- # DELETE OTS
+- hosts: localhost
+  connection: local
+  gather_facts: no
+
+#############################################################################
+#NNNNNNNNNNNNNNNN     Author:  David Hepler
+#NNNNNNNNNNNNNNNN     Info:   Delete's ONTAP Select Cluster by name 
+#NNNNNN    NNNNNN      
+#NNNNNN    NNNNNN     
+#NNNNNN    NNNNNN      
+#NNNNNN    NNNNNN     
+##############################################################################
+############ ------------------Pre-requisites --------- ###########
+# 
+# - This playbook is for installations on ESX hosts tied to a vCenter Server 
+# 
+##############################################################################
+############ ------------------OTS Return Codes --------- ############
+# 200 	OK 	Indicates success for calls that do not create a new object.
+# 201 	Created 	An object is successfully created; the location response header includes the unqiue identifer for the object.
+# 202 	Accepted 	A long-running job has been started to perform the request, but the operation has not completed.
+# 400 	Bad Request 	The request input is not recognized, malformed, or is otherwise not appropriate.
+# 403 	Forbidden 	Access is denied due to an authorization error.
+# 404 	Not Found 	The resource referred to in the request does not exist.
+# 405 	Method Not Allowed 	The HTTP verb in the request is not supported for the resource.
+# 409 	Conflict 	An attempt to create an object failed because the object already exists.
+# 500 	Internal Error 	Indication of a general, non-specific internal error.
+##############################################################################
+############ ------------------VARS --------- ############
+  vars:
+# ----- Deploy Specific -----
+    otd_user: "admin"
+    otd_password: "Netapp01!"
+    deploy_rest_api_url: "https://10.65.56.175/api/v3"
+# ----- Cluster Specific -----
+
+############ ------------------TASKS --------- ############
+
+  tasks:
+
+  - name: Check if Cluster already exists
+    uri:
+      url: "{{ deploy_rest_api_url }}/clusters?name={{ cluster_name }}"
+      method: GET
+      headers:
+        Content-Type: "application/json"
+      body_format: json
+      user: "{{ otd_user }}"
+      password: "{{ otd_password }}"
+      status_code: 200
+      validate_certs: False 
+    register: check_cluster_response
+
+  - debug: var=check_cluster_response
+
+#----------------------------------
+  - block:
+      - name: "End playbook if cluster does not exist"
+        debug:
+          msg: "Cluster does not exist, ending playbook"
+
+      - meta: end_play
+    when: check_cluster_response.json.num_records == 0
+
+
+  - set_fact:
+      cluster_id: "{{ item.id }}"
+    with_items: "{{ check_cluster_response.json.records }}"
+    when:  item.name  == cluster_name
+
+  - debug: var=cluster_id
+
+
+  - name: Delete Cluster
+    uri:
+      url: "{{ deploy_rest_api_url }}/clusters/{{ cluster_id }}?force=true"
+      method: DELETE
+      headers:
+        Content-Type: "application/json"
+      body_format: json
+      user: "{{ otd_user }}"
+      password: "{{ otd_password }}"
+      status_code: 202
+      validate_certs: False
+    register: delete_cluster_response
+
+  - debug: var=delete_cluster_response
+
