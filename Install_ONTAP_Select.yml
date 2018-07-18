@@ -58,7 +58,7 @@
     instance_type: "small"
     node_ips:
       - "10.65.59.165"
-    licence: 
+    license: 
       - ""
       - ""     
     storagepool_capacity:
