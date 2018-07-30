@@ -32,24 +32,25 @@
 ############ ------------------VARS --------- ############
   vars:
 # ----- Deploy Specific -----
-    otd_user: "admin"
-    otd_password: "Netapp01!"
-    deploy_rest_api_url: "https://10.65.56.175/api/v3"
+    deploy_name: "cbc-sdotdeploy1.muccbc.hq.netapp.com"
+    otd_user: ""
+    otd_password: ""
+    deploy_rest_api_url: "https://{{ deploy_name }}/api/v3"
 # ----- Cluster Specific -----
     new_cluster_node_num: "1"
     new_cluster_name: "select-1nc"
     ontap_version: "9.4"
-    new_cluster_gateway: "10.65.59.1"
-    new_cluster_ip: "10.65.59.164"
+    new_cluster_gateway: ""
+    new_cluster_ip: ""
     new_cluster_netmask: "255.255.255.0"
     ntp_servers:
-      - "10.65.56.5"
+      - ""
     domain_names:
-      - "muccbc.hq.netapp.com"
+      - ""
     dns_ips:
-      - "10.65.56.5"
-      - "10.65.56.6"
-    ots_password: "Netapp01!"
+      - ""
+      - ""
+    ots_password: ""
     mgmt_net: "ONTAP_Management"
     data_net: "ONTAP_UNTAGGED"
     int_net:  "ONTAP_Internal_Network"
@@ -57,38 +58,28 @@
 # ----- Node Specific -----
     instance_type: "small"
     node_ips:
-      - "10.65.59.165"
+      - ""
     license: 
       - ""
       - ""     
     storagepool_capacity:
-      - 600000
+      - 600000000000
     storagepool_name:
       - "esx_vc_sdot_linux_ds_01"
-#    storagepool_name:
-#      - "cbc-sdot-03-local-ds"
-#      - "cbc-sdot-04-local-ds"
 
 # ----- vCenter Specific -----
-    vcenter_server: "cbc-vc-sdot.muccbc.hq.netapp.com"
+    vcenter_server: ""
 # ----- Host Specific -----
     host_names: 
-      - "cbc-sdot-03.muccbc.hq.netapp.com"
-#      hypervisortype: "ESX"
-# --extra-vars='{"host_names": [1,2,3]}'
+      - ""
 
 ############ ------------------TASKS --------- ############
 
   tasks:
+  - name: Include Variables
+    include_vars: /etc/ansible/host_vars/{{ deploy_name }}
 
-#  - name: Debug host name list
-#    debug: var="host_names[{{ item }}]"
-#    with_sequence: start=0 count="{{ new_cluster_node_num|int }}" 
-#
-#  - name: Debug storagepool_name list
-#    debug: var="storagepool_name[{{ item }}]"
-#    with_sequence: start=0 count="{{ new_cluster_node_num|int }}" 
-#
+
   - name: Debug storagepool_capacity list
     debug: var="storagepool_capacity[{{ item }}]"
     with_sequence: start=0 count="{{ new_cluster_node_num|int }}" 
