@@ -1,6 +1,5 @@
 ---
 # defaults file for na_ontap_select_deploy
-deploy_name: "192.168.5.23"
 deploy_rest_api_url: "https://{{ deploy_name }}/api/v3"
 new_cluster_node_num: "1"
 new_cluster_name: "select-1nc"
