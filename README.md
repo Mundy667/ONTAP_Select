@@ -5,6 +5,7 @@ There are 2 Ansible Playbooks in this repository, one for the installation of an
 Requirements:
 - ONTAP Deploy 2.8 or newer
 - The vCenter Server needs to have already been added to the Credentials Manager in Deploy
+- NetApp Ansible Modules only running with NetApp lib [https://pypi.org/project/netapp-lib/|pip install netapp-lib]
 
 Known bugs/issues and Open RFEs
 
