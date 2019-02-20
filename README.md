@@ -39,7 +39,7 @@ new_cluster_node_num: "2"
 new_cluster_name: "cl01"
 ontap_version: "9.4P4"
 license_code: ""
-new_cluster_gateway: "192.168.5.1"
+new_cluster_gateway: "192.168.100.1"
 new_cluster_ip: "192.168.5.101"
 new_cluster_netmask: "255.255.255.0"
 ntp_servers:
@@ -71,3 +71,10 @@ host_names:
   - "192.168.5.22"
   - "192.168.5.20"
 ```
+
+You can then run the playbook like this:
+
+```
+ansible-playbook  -i inventory/hosts playbooks/create_cluster.yml
+```
+
