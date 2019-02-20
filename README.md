@@ -18,7 +18,15 @@ How to start
 
 We suggest to create groupvars to specify you environment specific parameters e.g. credentials, ONTAP Deploy Instance, network-configuration, ...
 
-The following example shows `inventory/group_vars/adminstation/all/vars.yml`
+First create an inventory file `inventory/hosts`:
+```
+[adminstation]
+localhost
+```
+
+Second create a vars file to configure your environment:
+
+The following example shows `inventory/group_vars/adminstation/all/vars.yml`:
 
 ```
 deploy_name: "192.168.5.23"
