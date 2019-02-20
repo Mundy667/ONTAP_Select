@@ -1,0 +1,6 @@
+- hosts: adminstation
+  connection: local
+  gather_facts: no
+  roles:
+    - role: roles/na_ontap_select_deploy
+
